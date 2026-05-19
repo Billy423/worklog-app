@@ -1,0 +1,23 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Dependencies (add once stack is decided)
+# node_modules/
+# target/
+# __pycache__/
+
+# Build output (add once stack is decided)
+# dist/
+# build/
+
+.claude/
