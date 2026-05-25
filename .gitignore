@@ -11,13 +11,14 @@ Thumbs.db
 *.log
 logs/
 
-# Dependencies (add once stack is decided)
-# node_modules/
-# target/
-# __pycache__/
+# Dependencies
+node_modules/
 
-# Build output (add once stack is decided)
-# dist/
-# build/
+# Build output
+dist/
+build/
 
 .claude/
+secrets/
+
+.playwright-mcp

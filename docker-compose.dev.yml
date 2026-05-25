@@ -1,0 +1,19 @@
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: devpassword
+
+  app:
+    build:
+      context: ./backend
+      target: dev
+    volumes:
+      - ./backend/src:/app/src
+    environment:
+      NODE_ENV: development
+
+  nginx:
+    profiles:
+      - nginx
