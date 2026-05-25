@@ -13,6 +13,7 @@ services:
       - ./backend/src:/app/src
     environment:
       NODE_ENV: development
+    command: npm run dev
 
   nginx:
     profiles:
