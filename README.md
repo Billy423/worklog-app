@@ -18,7 +18,7 @@ worklog-app/
 cp backend/.env.example backend/.env
 # Fill in DATABASE_URL, PME credentials, ARCGIS_API_KEY
 
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
 
 Backend: `http://localhost:3000`  
