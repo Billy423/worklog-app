@@ -15,8 +15,12 @@ worklog-app/
 ## Quick Start (Dev)
 
 ```bash
+# Root .env — read by Docker Compose for variable substitution (postgres password)
+cp .env.example .env
+
+# Backend .env — read by the app container
 cp backend/.env.example backend/.env
-# Fill in DATABASE_URL, PME credentials, ARCGIS_API_KEY
+# Fill in: POSTGRES_PASSWORD (same value as root .env), ARCGIS_API_KEY, PME credentials
 
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
