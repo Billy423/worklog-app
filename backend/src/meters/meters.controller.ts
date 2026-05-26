@@ -1,19 +1,17 @@
-// Meter cache API. Real implementation lands in Step 6 once the pg pool +
-// migrations are in place; stubs here so the route surface is testable today.
+// Meter cache API. Serves the full meter list for the worker form's building/meter picker.
+// All data is read from WorkLog's own DB — no PME or ArcGIS call at request time.
 
-import { Controller, Get, NotImplementedException, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { MetersService } from './meters.service';
 
 @Controller('meters')
 @UseGuards(JwtAuthGuard)
 export class MetersController {
-    @Get()
-    list(): never {
-        throw new NotImplementedException('GET /api/meters — implemented in Step 6');
-    }
+    constructor(private readonly meters: MetersService) {}
 
-    @Get(':ionDeviceName')
-    one(@Param('ionDeviceName') _name: string): never {
-        throw new NotImplementedException('GET /api/meters/:ionDeviceName — implemented in Step 6');
+    @Get()
+    async list() {
+        return this.meters.getAllMeters();
     }
 }
