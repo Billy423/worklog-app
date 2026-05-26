@@ -54,7 +54,3 @@ CREATE INDEX idx_meters_arcgis_object_id ON meters (arcgis_object_id)
 
 CREATE INDEX idx_meters_pme_display_name ON meters (pme_display_name);
 
--- Down
-DROP INDEX IF EXISTS idx_meters_pme_display_name;
-DROP INDEX IF EXISTS idx_meters_arcgis_object_id;
-DROP TABLE IF EXISTS meters;

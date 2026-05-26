@@ -28,8 +28,3 @@ CREATE INDEX idx_work_log_entries_meter ON work_log_entries (meter_ion_device_na
 CREATE INDEX idx_work_log_entries_submitted_by ON work_log_entries (submitted_by_oid);
 CREATE INDEX idx_work_log_entries_created_at ON work_log_entries (created_at DESC);
 
--- Down
-DROP INDEX IF EXISTS idx_work_log_entries_created_at;
-DROP INDEX IF EXISTS idx_work_log_entries_submitted_by;
-DROP INDEX IF EXISTS idx_work_log_entries_meter;
-DROP TABLE IF EXISTS work_log_entries;

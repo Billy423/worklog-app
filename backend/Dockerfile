@@ -14,8 +14,9 @@ EXPOSE 3000
 CMD ["npm", "run", "start:dev"]
 
 # build: compile TypeScript to ./dist
+# NODE_ENV must NOT be set to production here — npm install skips devDependencies otherwise,
+# and @nestjs/cli (needed for nest build) is a devDependency.
 FROM base AS build
-ENV NODE_ENV=production
 RUN npm install
 COPY . .
 RUN npm run build
@@ -27,5 +28,6 @@ ENV NODE_ENV=production
 COPY package.json package-lock.json* ./
 RUN npm install --omit=dev
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/migrations ./migrations
 EXPOSE 3000
 CMD ["node", "dist/main.js"]
