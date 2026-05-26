@@ -11,27 +11,27 @@ import type { AuthenticatedUser } from '../types/user';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  private readonly logger = new Logger(JwtAuthGuard.name);
+    private readonly logger = new Logger(JwtAuthGuard.name);
 
-  constructor(private readonly config: ConfigService<Env, true>) {
-    super();
-  }
-
-  canActivate(context: ExecutionContext) {
-    if (this.config.get('AUTH_BYPASS', { infer: true })) {
-      const req = context.switchToHttp().getRequest<{ user?: AuthenticatedUser }>();
-      const role = this.config.get('AUTH_BYPASS_ROLE', { infer: true });
-      req.user = {
-        oid: 'dev-user-oid',
-        email: 'dev@worklog.local',
-        name: 'Dev User',
-        roles: [role],
-      };
-      this.logger.warn(
-        `AUTH_BYPASS active — request authenticated as stub user with role "${role}"`,
-      );
-      return true;
+    constructor(private readonly config: ConfigService<Env, true>) {
+        super();
     }
-    return super.canActivate(context);
-  }
+
+    canActivate(context: ExecutionContext) {
+        if (this.config.get('AUTH_BYPASS', { infer: true })) {
+            const req = context.switchToHttp().getRequest<{ user?: AuthenticatedUser }>();
+            const role = this.config.get('AUTH_BYPASS_ROLE', { infer: true });
+            req.user = {
+                oid: 'dev-user-oid',
+                email: 'dev@worklog.local',
+                name: 'Dev User',
+                roles: [role],
+            };
+            this.logger.warn(
+                `AUTH_BYPASS active — request authenticated as stub user with role "${role}"`,
+            );
+            return true;
+        }
+        return super.canActivate(context);
+    }
 }

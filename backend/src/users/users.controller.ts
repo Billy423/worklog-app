@@ -9,8 +9,8 @@ import type { AuthenticatedUser } from '../auth/types/user';
 @Controller('me')
 @UseGuards(JwtAuthGuard)
 export class UsersController {
-  @Get()
-  me(@CurrentUser() user: AuthenticatedUser) {
-    return user;
-  }
+    @Get()
+    me(@CurrentUser() user: AuthenticatedUser) {
+        return user;
+    }
 }

@@ -18,34 +18,37 @@ import { AdminModule } from './admin/admin.module';
 import { ReportsModule } from './reports/reports.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      validate: validateEnv,
-    }),
-    LoggerModule.forRootAsync({
-      useFactory: () => ({
-        pinoHttp: {
-          level: process.env.LOG_LEVEL ?? 'info',
-          transport:
-            process.env.NODE_ENV === 'production'
-              ? undefined
-              : { target: 'pino-pretty', options: { colorize: true, singleLine: true } },
-          redact: ['req.headers.authorization', 'req.headers.cookie'],
-        },
-      }),
-    }),
-    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
-    AuthModule,
-    DatabaseModule,
-    HealthModule,
-    UsersModule,
-    MetersModule,
-    WorkLogsModule,
-    SyncModule,
-    AdminModule,
-    ReportsModule,
-  ],
-  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
+    imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+            validate: validateEnv,
+        }),
+        LoggerModule.forRootAsync({
+            useFactory: () => ({
+                pinoHttp: {
+                    level: process.env.LOG_LEVEL ?? 'info',
+                    transport:
+                        process.env.NODE_ENV === 'production'
+                            ? undefined
+                            : {
+                                  target: 'pino-pretty',
+                                  options: { colorize: true, singleLine: true },
+                              },
+                    redact: ['req.headers.authorization', 'req.headers.cookie'],
+                },
+            }),
+        }),
+        ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
+        AuthModule,
+        DatabaseModule,
+        HealthModule,
+        UsersModule,
+        MetersModule,
+        WorkLogsModule,
+        SyncModule,
+        AdminModule,
+        ReportsModule,
+    ],
+    providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}

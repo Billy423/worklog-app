@@ -10,8 +10,8 @@ import { Roles } from '../auth/decorators/roles.decorator';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('admin')
 export class AdminController {
-  @Post('sync')
-  triggerSync(): never {
-    throw new NotImplementedException('POST /api/admin/sync — implemented in Step 7');
-  }
+    @Post('sync')
+    triggerSync(): never {
+        throw new NotImplementedException('POST /api/admin/sync — implemented in Step 7');
+    }
 }

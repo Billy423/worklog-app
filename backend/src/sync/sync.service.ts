@@ -5,11 +5,11 @@ import { Injectable, Logger, NotImplementedException } from '@nestjs/common';
 
 @Injectable()
 export class SyncService {
-  private readonly logger = new Logger(SyncService.name);
+    private readonly logger = new Logger(SyncService.name);
 
-  // Real implementation lands in Step 7 — PME + ArcGIS sync + @Cron schedule.
-  async runDailySync(): Promise<never> {
-    this.logger.warn('SyncService.runDailySync — not yet implemented');
-    throw new NotImplementedException('Daily sync not yet implemented (Step 7)');
-  }
+    // Real implementation lands in Step 7 — PME + ArcGIS sync + @Cron schedule.
+    async runDailySync(): Promise<never> {
+        this.logger.warn('SyncService.runDailySync — not yet implemented');
+        throw new NotImplementedException('Daily sync not yet implemented (Step 7)');
+    }
 }

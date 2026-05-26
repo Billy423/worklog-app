@@ -7,13 +7,13 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @Controller('meters')
 @UseGuards(JwtAuthGuard)
 export class MetersController {
-  @Get()
-  list(): never {
-    throw new NotImplementedException('GET /api/meters — implemented in Step 6');
-  }
+    @Get()
+    list(): never {
+        throw new NotImplementedException('GET /api/meters — implemented in Step 6');
+    }
 
-  @Get(':ionDeviceName')
-  one(@Param('ionDeviceName') _name: string): never {
-    throw new NotImplementedException('GET /api/meters/:ionDeviceName — implemented in Step 6');
-  }
+    @Get(':ionDeviceName')
+    one(@Param('ionDeviceName') _name: string): never {
+        throw new NotImplementedException('GET /api/meters/:ionDeviceName — implemented in Step 6');
+    }
 }

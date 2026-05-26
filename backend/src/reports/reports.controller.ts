@@ -9,8 +9,8 @@ import { Roles } from '../auth/decorators/roles.decorator';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('admin')
 export class ReportsController {
-  @Get()
-  list(): never {
-    throw new NotImplementedException('Reports — post-MVP');
-  }
+    @Get()
+    list(): never {
+        throw new NotImplementedException('Reports — post-MVP');
+    }
 }
