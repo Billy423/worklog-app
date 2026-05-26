@@ -1,23 +1,63 @@
-# Environment / secrets
+# ---------- Environment / secrets ----------
 .env
 .env.*
 !.env.example
+secrets/
+*.pem
+*.key
+*.crt
 
-# OS
+# ---------- Dependencies ----------
+node_modules/
+
+# ---------- Build output ----------
+dist/
+build/
+out/
+.tsbuildinfo
+*.tsbuildinfo
+
+# ---------- Frontend (Vite / React) ----------
+frontend/dist/
+.vite/
+
+# ---------- Backend (NestJS) ----------
+backend/dist/
+
+# ---------- Test / coverage ----------
+coverage/
+*.lcov
+.nyc_output/
+
+# ---------- Caches ----------
+.cache/
+.eslintcache
+.parcel-cache/
+.turbo/
+
+# ---------- Logs ----------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------- OS ----------
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-logs/
+# ---------- Editors / IDEs ----------
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+*.swo
 
-# Dependencies (add once stack is decided)
-# node_modules/
-# target/
-# __pycache__/
-
-# Build output (add once stack is decided)
-# dist/
-# build/
-
+# ---------- Claude Code / tooling ----------
 .claude/
+.playwright-mcp/
+
+# ---------- Docker ----------
+*.local
