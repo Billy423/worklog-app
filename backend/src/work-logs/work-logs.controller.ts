@@ -1,7 +1,7 @@
 // Work log entries — the core write surface. Stubbed until requirements
 // (work-type taxonomy, photo upload, etc.) are finalised post-MVP1.
 
-import { Body, Controller, Get, NotImplementedException, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, NotImplementedException, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('work-logs')
@@ -13,7 +13,7 @@ export class WorkLogsController {
     }
 
     @Post()
-    create(@Body() _body: unknown): never {
+    create(): never {
         throw new NotImplementedException('POST /api/work-logs — pending requirements');
     }
 }
