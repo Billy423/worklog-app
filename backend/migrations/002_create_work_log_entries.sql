@@ -19,7 +19,6 @@ CREATE TABLE work_log_entries (
 
     -- TODO: add columns after requirements finalised
     --   work_type        VARCHAR(100)  — category (e.g. 'pin_relabel', 'inspection', 'repair')
-    --   notes            TEXT          — free-text description (MVP1 primary field)
     --   io_pins_worked   TEXT[]        — array of pin names worked on
     --   photo_urls       TEXT[]        — uploaded photo references
 );
