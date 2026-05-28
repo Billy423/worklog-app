@@ -136,6 +136,14 @@ jobs:
         working-directory: backend
         run: npm ci && npm run build
 
+      - name: Verify OpenAPI spec is up to date
+        working-directory: backend
+        # Regenerate from the built app and fail if it differs from the committed file,
+        # so docs/openapi.yaml can never drift from the actual routes/DTOs.
+        run: |
+          npm run generate:openapi
+          git diff --exit-code -- docs/openapi.yaml
+
       - name: Build frontend
         working-directory: frontend
         run: npm ci && npm run build
