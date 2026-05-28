@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 
 # base: shared layer with package manifests
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 WORKDIR /app
 COPY package.json package-lock.json* ./
 
@@ -22,7 +22,7 @@ COPY . .
 RUN npm run build
 
 # production: runtime-only, no dev deps
-FROM node:20-alpine AS production
+FROM node:22-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json package-lock.json* ./
