@@ -1,29 +1,50 @@
-:root {
-  --mcmaster-maroon: #7a003c;
-  --mcmaster-maroon-dark: #5a002c;
-  --mcmaster-gold: #fdbf57;
-  --offline-amber: #b25b00;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color-scheme: light;
-}
+@layer base {
+  :root {
+    /* McMaster brand palette (raw hex — also surfaced via tailwind `mcmaster.*`). */
+    --mcmaster-maroon: #7a003c;
+    --mcmaster-maroon-dark: #5a002c;
+    --mcmaster-gold: #fdbf57;
+    --offline-amber: #b25b00;
 
-* {
-  box-sizing: border-box;
-}
+    /* shadcn/ui semantic tokens (HSL channel values, no hsl() wrapper). */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    /* primary = McMaster maroon (#7a003c). */
+    --primary: 331 100% 24%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 89%;
+    --input: 0 0% 89%;
+    --ring: 331 100% 24%;
+    --radius: 0.5rem;
 
-html,
-body,
-#root {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-}
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+      Cantarell, sans-serif;
+    color-scheme: light;
+  }
 
-body {
-  background: #fafafa;
-  color: #1a1a1a;
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    margin: 0;
+    min-height: 100vh;
+  }
 }

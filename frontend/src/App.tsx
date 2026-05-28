@@ -1,36 +1,28 @@
-// Top-level layout. Header + offline banner + placeholder content area.
-// Real feature surfaces (meter picker, work-log form, admin dashboard) land
-// in later issues; this is the visual frame.
+// Top-level layout. Header + dev-mode/offline banners + content area.
+// The work-log entry form (and offline sync banner) land in later steps of
+// this phase; this is the visual frame with the Tailwind/shadcn toolchain wired.
 
+import { DevModeBanner } from './layout/DevModeBanner';
 import { Header } from './layout/Header';
 import { OfflineBanner } from './layout/OfflineBanner';
+import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
 
 export function App() {
-    return (
-        <>
-            <Header />
-            <OfflineBanner />
-            <main
-                style={{
-                    maxWidth: 960,
-                    margin: '0 auto',
-                    padding: '24px 20px',
-                }}
-            >
-                <section
-                    style={{
-                        background: '#fff',
-                        border: '1px solid #e2e2e2',
-                        borderRadius: 8,
-                        padding: '20px',
-                    }}
-                >
-                    <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Form goes here</h2>
-                    <p style={{ margin: 0, color: '#555' }}>
-                        Meter picker and work-log entry form land in a follow-up issue.
-                    </p>
-                </section>
-            </main>
-        </>
-    );
+  return (
+    <>
+      <Header />
+      <DevModeBanner />
+      <OfflineBanner />
+      <main className="mx-auto max-w-3xl px-5 py-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Form goes here</CardTitle>
+          </CardHeader>
+          <CardContent className="text-muted-foreground">
+            The work-log entry form lands in a follow-up step of this phase.
+          </CardContent>
+        </Card>
+      </main>
+    </>
+  );
 }
