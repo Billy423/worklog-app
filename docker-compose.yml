@@ -17,6 +17,7 @@ services:
       - internal
 
   app:
+    image: worklog-app
     build:
       context: ./backend
       dockerfile: Dockerfile

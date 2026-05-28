@@ -4,6 +4,7 @@ services:
       - "5432:5432"
 
   app:
+    image: worklog-app-dev
     build:
       context: ./backend
       dockerfile: Dockerfile
