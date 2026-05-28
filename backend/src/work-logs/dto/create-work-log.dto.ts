@@ -1,3 +1,4 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ArrayMaxSize, IsArray, IsISO8601, IsOptional, IsString, MaxLength } from 'class-validator';
 
 /**
@@ -6,6 +7,7 @@ import { ArrayMaxSize, IsArray, IsISO8601, IsOptional, IsString, MaxLength } fro
  */
 export class CreateWorkLogDto {
     /** Target meter (PME canonical device name). */
+    @ApiProperty({ description: 'Target meter (PME canonical device name).', maxLength: 200 })
     @IsString()
     @MaxLength(200)
     meterIonDeviceName!: string;
@@ -16,6 +18,12 @@ export class CreateWorkLogDto {
      * `meter_io_pins` rows in the service layer — intentionally not a DB FK so
      * future pin renames or deletes do not affect historical entries.
      */
+    @ApiPropertyOptional({
+        description: 'Pin IDs the worker reported working on. Empty for electricity-only meters.',
+        type: [String],
+        maxItems: 20,
+        default: [],
+    })
     @IsArray()
     @ArrayMaxSize(20)
     @IsString({ each: true })
@@ -23,6 +31,7 @@ export class CreateWorkLogDto {
     pinIds: string[] = [];
 
     /** Free-text description of the work performed. Optional. */
+    @ApiPropertyOptional({ description: 'Free-text description of the work performed.' })
     @IsOptional()
     @IsString()
     notes?: string;
@@ -33,6 +42,11 @@ export class CreateWorkLogDto {
      * original timestamp so `logged_at` reflects when the work happened, not when
      * the network reconnected.
      */
+    @ApiPropertyOptional({
+        description:
+            'When the work was performed (ISO 8601). Defaults to server time; offline clients supply the original timestamp on replay.',
+        format: 'date-time',
+    })
     @IsOptional()
     @IsISO8601()
     loggedAt?: string;

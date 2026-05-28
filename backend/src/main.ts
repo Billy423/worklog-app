@@ -3,12 +3,14 @@
 
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import type { Env } from './config/env.schema';
+import { buildOpenApiConfig } from './openapi';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -36,6 +38,14 @@ async function bootstrap() {
         }),
     );
     app.useGlobalFilters(new AllExceptionsFilter());
+
+    // Dev-only API docs. Not registered in production. setGlobalPrefix does not apply to
+    // the Swagger route, so the path is given as 'api/docs' to serve at /api/docs (and the
+    // raw spec at /api/docs-json).
+    if (config.get('NODE_ENV', { infer: true }) !== 'production') {
+        const document = SwaggerModule.createDocument(app, buildOpenApiConfig());
+        SwaggerModule.setup('api/docs', app, document);
+    }
 
     const port = config.get('PORT', { infer: true });
     await app.listen(port);
