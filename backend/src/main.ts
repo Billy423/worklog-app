@@ -10,7 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import type { Env } from './config/env.schema';
-import { buildOpenApiConfig } from './openapi';
+import { buildOpenApiConfig } from './openapi/config';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, { bufferLogs: true });
