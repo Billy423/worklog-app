@@ -5,7 +5,7 @@
 import { DevModeBanner } from './layout/DevModeBanner';
 import { Header } from './layout/Header';
 import { OfflineBanner } from './layout/OfflineBanner';
-import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
+import { WorkLogForm } from './features/worklog/WorkLogForm';
 
 export function App() {
   return (
@@ -14,14 +14,7 @@ export function App() {
       <DevModeBanner />
       <OfflineBanner />
       <main className="mx-auto max-w-3xl px-5 py-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Form goes here</CardTitle>
-          </CardHeader>
-          <CardContent className="text-muted-foreground">
-            The work-log entry form lands in a follow-up step of this phase.
-          </CardContent>
-        </Card>
+        <WorkLogForm />
       </main>
     </>
   );
