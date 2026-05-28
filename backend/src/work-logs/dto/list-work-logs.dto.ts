@@ -1,3 +1,4 @@
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsInt, IsISO8601, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
 
@@ -10,22 +11,35 @@ import { IsInt, IsISO8601, IsOptional, IsString, Max, MaxLength, Min } from 'cla
  */
 export class ListWorkLogsQueryDto {
     /** Filter to entries against this meter (PME canonical device name). */
+    @ApiPropertyOptional({
+        description: 'Filter to entries against this meter (PME canonical device name).',
+        maxLength: 200,
+    })
     @IsOptional()
     @IsString()
     @MaxLength(200)
     meterId?: string;
 
     /** Lower bound on `logged_at` (ISO 8601). */
+    @ApiPropertyOptional({
+        description: 'Lower bound on logged_at (ISO 8601).',
+        format: 'date-time',
+    })
     @IsOptional()
     @IsISO8601()
     from?: string;
 
     /** Upper bound on `logged_at` (ISO 8601). */
+    @ApiPropertyOptional({
+        description: 'Upper bound on logged_at (ISO 8601).',
+        format: 'date-time',
+    })
     @IsOptional()
     @IsISO8601()
     to?: string;
 
     /** 1-indexed page number. */
+    @ApiPropertyOptional({ description: '1-indexed page number.', minimum: 1, default: 1 })
     @IsOptional()
     @Type(() => Number)
     @IsInt()
@@ -33,6 +47,12 @@ export class ListWorkLogsQueryDto {
     page: number = 1;
 
     /** Page size; capped at 200 to bound memory. */
+    @ApiPropertyOptional({
+        description: 'Page size; capped at 200.',
+        minimum: 1,
+        maximum: 200,
+        default: 50,
+    })
     @IsOptional()
     @Type(() => Number)
     @IsInt()

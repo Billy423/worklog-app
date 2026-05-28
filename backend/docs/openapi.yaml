@@ -1,0 +1,167 @@
+openapi: 3.0.0
+paths:
+  /api/health:
+    get:
+      operationId: HealthController_check
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - Health
+  /api/me:
+    get:
+      operationId: UsersController_me
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - Users
+  /api/meters:
+    get:
+      operationId: MetersController_list
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags: &a1
+        - Meters
+  /api/meters/{ionDeviceName}:
+    get:
+      operationId: MetersController_getOne
+      parameters:
+        - name: ionDeviceName
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+  /api/meters/{ionDeviceName}/pins:
+    get:
+      operationId: MetersController_getPins
+      parameters:
+        - name: ionDeviceName
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+      tags: *a1
+  /api/work-logs:
+    get:
+      operationId: WorkLogsController_list
+      parameters:
+        - name: meterId
+          required: false
+          in: query
+          description: Filter to entries against this meter (PME canonical device name).
+          schema:
+            maxLength: 200
+            type: string
+        - name: from
+          required: false
+          in: query
+          description: Lower bound on logged_at (ISO 8601).
+          schema:
+            format: date-time
+            type: string
+        - name: to
+          required: false
+          in: query
+          description: Upper bound on logged_at (ISO 8601).
+          schema:
+            format: date-time
+            type: string
+        - name: page
+          required: false
+          in: query
+          description: 1-indexed page number.
+          schema:
+            minimum: 1
+            default: 1
+            type: number
+        - name: limit
+          required: false
+          in: query
+          description: Page size; capped at 200.
+          schema:
+            minimum: 1
+            maximum: 200
+            default: 50
+            type: number
+      responses:
+        "200":
+          description: ""
+      tags: &a2
+        - WorkLogs
+    post:
+      operationId: WorkLogsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateWorkLogDto"
+      responses:
+        "201":
+          description: ""
+      tags: *a2
+  /api/admin/sync:
+    post:
+      operationId: AdminController_triggerSync
+      parameters: []
+      responses:
+        "202":
+          description: ""
+      tags:
+        - Admin
+  /api/reports:
+    get:
+      operationId: ReportsController_list
+      parameters: []
+      responses:
+        "200":
+          description: ""
+      tags:
+        - Reports
+info:
+  title: WorkLog API
+  description: REST API for the McMaster Facility Services WorkLog application.
+  version: 0.1.0
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    CreateWorkLogDto:
+      type: object
+      properties:
+        meterIonDeviceName:
+          type: string
+          description: Target meter (PME canonical device name).
+          maxLength: 200
+        pinIds:
+          description: Pin IDs the worker reported working on. Empty for electricity-only
+            meters.
+          maxItems: 20
+          default: []
+          type: array
+          items:
+            type: string
+        notes:
+          type: string
+          description: Free-text description of the work performed.
+        loggedAt:
+          type: string
+          description: When the work was performed (ISO 8601). Defaults to server time;
+            offline clients supply the original timestamp on replay.
+          format: date-time
+      required:
+        - meterIonDeviceName
