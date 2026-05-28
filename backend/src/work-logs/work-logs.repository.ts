@@ -62,6 +62,7 @@ export interface CreateWorkLogInput {
     userEmail: string;
     pinIds: string[];
     notes?: string;
+    loggedAt?: string;
 }
 
 @Injectable()
@@ -79,8 +80,8 @@ export class WorkLogsRepository {
         const result = await this.pool.query<WorkLogEntryRow>(
             `
             INSERT INTO work_log_entries
-                (meter_ion_device_name, user_oid, user_email, pin_ids, notes)
-            VALUES ($1, $2, $3, $4, $5)
+                (meter_ion_device_name, user_oid, user_email, pin_ids, notes, logged_at)
+            VALUES ($1, $2, $3, $4, $5, COALESCE($6::timestamptz, NOW()))
             RETURNING
                 id,
                 meter_ion_device_name AS "meterIonDeviceName",
@@ -97,6 +98,7 @@ export class WorkLogsRepository {
                 input.userEmail,
                 input.pinIds,
                 input.notes ?? null,
+                input.loggedAt ?? null,
             ],
         );
         return result.rows[0];

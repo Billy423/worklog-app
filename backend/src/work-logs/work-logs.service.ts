@@ -67,6 +67,7 @@ export class WorkLogsService {
             userEmail: user.email,
             pinIds: dto.pinIds,
             notes: dto.notes,
+            loggedAt: dto.loggedAt,
         });
     }
 

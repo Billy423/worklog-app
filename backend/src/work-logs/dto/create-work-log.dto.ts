@@ -1,4 +1,4 @@
-import { ArrayMaxSize, IsArray, IsOptional, IsString, MaxLength } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsISO8601, IsOptional, IsString, MaxLength } from 'class-validator';
 
 /**
  * Request body for `POST /api/work-logs`. Shape validation only — semantic
@@ -26,4 +26,14 @@ export class CreateWorkLogDto {
     @IsOptional()
     @IsString()
     notes?: string;
+
+    /**
+     * When the work was actually performed (ISO 8601). Optional — defaults to
+     * server time at insert. Offline clients replaying a queued entry supply the
+     * original timestamp so `logged_at` reflects when the work happened, not when
+     * the network reconnected.
+     */
+    @IsOptional()
+    @IsISO8601()
+    loggedAt?: string;
 }
