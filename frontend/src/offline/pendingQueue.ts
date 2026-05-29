@@ -15,6 +15,21 @@ export interface PendingEntry<TPayload = unknown> {
 
 const STORAGE_KEY = 'worklog:pendingEntries';
 
+// In-tab change notification. localStorage's `storage` event only fires in
+// OTHER tabs, so components in this tab need their own signal to re-render when
+// the queue mutates. Listeners are notified on every write().
+type Listener = () => void;
+const listeners = new Set<Listener>();
+
+export function subscribePending(listener: Listener): () => void {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+}
+
+function notify(): void {
+    for (const listener of listeners) listener();
+}
+
 function read(): PendingEntry[] {
     if (typeof localStorage === 'undefined') return [];
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -32,6 +47,7 @@ function read(): PendingEntry[] {
 function write(entries: PendingEntry[]): void {
     if (typeof localStorage === 'undefined') return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    notify();
 }
 
 function uuid(): string {

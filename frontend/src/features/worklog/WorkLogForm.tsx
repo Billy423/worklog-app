@@ -4,8 +4,9 @@
 // field clears everything downstream (AC4). Building/Room/Meter lists are
 // derived client-side from GET /api/meters (see lib/buildingLocation).
 //
-// This file owns the ONLINE submit path (POST + success toast + reset). The
-// offline branch and sync banner are layered on in a later step.
+// When the browser is offline the submit instead enqueues the entry to the
+// localStorage queue (ADR-004 Option C); the PendingSyncBanner drains it via a
+// manual "Sync now". Online submits POST immediately.
 
 import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -16,6 +17,8 @@ import { toast } from 'sonner';
 import { useMeters, useSubmitWorkLog } from '@/api/queries';
 import { ApiError } from '@/api/apiFetch';
 import type { CreateWorkLogInput } from '@/api/schemas';
+import { enqueuePending } from '@/offline/pendingQueue';
+import { useOnlineStatus } from '@/offline/useOnlineStatus';
 import { listBuildings, listMetersAt, listRooms } from '@/lib/buildingLocation';
 import { Button } from '@/components/ui/button';
 import {
@@ -62,6 +65,7 @@ const EMPTY_FORM: FormValues = {
 export function WorkLogForm() {
   const { data: meters, isLoading, isError, refetch } = useMeters();
   const submit = useSubmitWorkLog();
+  const online = useOnlineStatus();
 
   const { control, handleSubmit, watch, setValue, register, reset } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -90,6 +94,15 @@ export function WorkLogForm() {
       notes: values.notes?.trim() ? values.notes.trim() : undefined,
       loggedAt: new Date().toISOString(),
     };
+
+    // Offline: defer to the localStorage queue and clear the form so the next
+    // entry can be logged. The PendingSyncBanner drains the queue when back online.
+    if (!online) {
+      enqueuePending(input);
+      toast.success('Saved on this device — sync when you reconnect');
+      reset(EMPTY_FORM);
+      return;
+    }
 
     submit.mutate(input, {
       onSuccess: () => {
@@ -240,7 +253,11 @@ export function WorkLogForm() {
               className="w-full"
               disabled={!meterIonDeviceName || submit.isPending}
             >
-              {submit.isPending ? 'Submitting…' : 'Submit work log'}
+              {submit.isPending
+                ? 'Submitting…'
+                : online
+                  ? 'Submit work log'
+                  : 'Save on this device'}
             </Button>
           </form>
         )}

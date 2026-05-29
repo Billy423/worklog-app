@@ -39,15 +39,20 @@ export function useMeterPins(ionDeviceName: string | undefined) {
   });
 }
 
+/**
+ * POST one work-log entry and return the parsed 201 response. Shared by the
+ * online submit mutation and the offline-queue "Sync now" flow so both go
+ * through the same validation.
+ */
+export async function postWorkLog(input: CreateWorkLogInput): Promise<WorkLog> {
+  const data = await apiFetch<unknown>('/api/work-logs', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
+  return workLogSchema.parse(data);
+}
+
 /** Submit a work log entry. Returns the parsed 201 response. */
 export function useSubmitWorkLog() {
-  return useMutation({
-    mutationFn: async (input: CreateWorkLogInput): Promise<WorkLog> => {
-      const data = await apiFetch<unknown>('/api/work-logs', {
-        method: 'POST',
-        body: JSON.stringify(input),
-      });
-      return workLogSchema.parse(data);
-    },
-  });
+  return useMutation({ mutationFn: postWorkLog });
 }
