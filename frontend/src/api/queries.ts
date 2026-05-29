@@ -39,17 +39,27 @@ export function useMeterPins(ionDeviceName: string | undefined) {
   });
 }
 
-/**
- * POST one work-log entry and return the parsed 201 response. Shared by the
- * online submit mutation and the offline-queue "Sync now" flow so both go
- * through the same validation.
- */
+/** POST one work-log entry and return the parsed 201 response. */
 export async function postWorkLog(input: CreateWorkLogInput): Promise<WorkLog> {
   const data = await apiFetch<unknown>('/api/work-logs', {
     method: 'POST',
     body: JSON.stringify(input),
   });
   return workLogSchema.parse(data);
+}
+
+/**
+ * Delivery-only POST for the offline-queue drain. Success is any 2xx — the
+ * server has committed the write — independent of whether the response body
+ * matches `workLogSchema`. The drain uses this instead of `postWorkLog` so a
+ * harmless response-shape drift can't make an already-saved entry look failed
+ * and get re-sent as a duplicate.
+ */
+export async function deliverWorkLog(input: CreateWorkLogInput): Promise<void> {
+  await apiFetch<unknown>('/api/work-logs', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
 }
 
 /** Submit a work log entry. Returns the parsed 201 response. */
