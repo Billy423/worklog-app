@@ -1,6 +1,6 @@
-// I/O pin multi-select for the selected meter. Fetches pins for the meter and
-// renders a checkbox per pin. Handles the three async states explicitly:
-// loading, error (with retry), and empty — electricity-only meters return [],
+// I/O pin multi-select for the selected meter. Renders a checkbox per pin and
+// handles each async state explicitly: loading, error (with retry), paused
+// (offline with no cached pins), and empty — electricity-only meters return [],
 // which is valid and lets the form submit with no pins (AC2).
 
 import { useMeterPins } from '@/api/queries';
@@ -14,7 +14,7 @@ interface PinChecklistProps {
 }
 
 export function PinChecklist({ ionDeviceName, value, onChange }: PinChecklistProps) {
-  const { data: pins, isLoading, isError, refetch } = useMeterPins(ionDeviceName);
+  const { data: pins, isLoading, isError, isPaused, refetch } = useMeterPins(ionDeviceName);
 
   if (isLoading) {
     return <p className="text-sm text-muted-foreground">Loading pins…</p>;
@@ -28,6 +28,15 @@ export function PinChecklist({ ionDeviceName, value, onChange }: PinChecklistPro
           Retry
         </Button>
       </div>
+    );
+  }
+
+  // Offline and no cached pins for this meter (query is paused, not empty).
+  if (!pins && isPaused) {
+    return (
+      <p className="text-sm text-muted-foreground">
+        Pins for this meter aren't available offline — they'll load once you're back online.
+      </p>
     );
   }
 
