@@ -6,14 +6,14 @@ import { Pool } from 'pg';
 import { PG_POOL } from '../database/database.module';
 
 /**
- * Single work-log entry as returned by the create path. Mirrors the
- * `work_log_entries` table columns in camelCase.
+ * Single work-log entry as returned by the create path, matching the API
+ * contract. `user_oid` is written and used for RBAC but never returned — it is
+ * the Azure AD object id, an internal audit field we don't expose to clients.
  */
 export interface WorkLogEntryRow {
     id: string;
     meterIonDeviceName: string;
-    userOid: string;
-    userEmail: string;
+    submittedByEmail: string;
     pinIds: string[];
     notes: string | null;
     loggedAt: Date;
@@ -23,14 +23,14 @@ export interface WorkLogEntryRow {
 /**
  * Slim work-log shape returned by the list endpoint. Joins through to
  * `meters.pme_display_name` for display so the client doesn't need a second
- * round-trip per row; drops audit fields (userOid, createdAt) the list view
+ * round-trip per row; drops audit fields (user_oid, createdAt) the list view
  * doesn't render.
  */
 export interface WorkLogListItem {
     id: string;
     meterIonDeviceName: string;
     meterDisplayName: string | null;
-    userEmail: string;
+    submittedByEmail: string;
     pinIds: string[];
     notes: string | null;
     loggedAt: Date;
@@ -85,8 +85,7 @@ export class WorkLogsRepository {
             RETURNING
                 id,
                 meter_ion_device_name AS "meterIonDeviceName",
-                user_oid              AS "userOid",
-                user_email            AS "userEmail",
+                user_email            AS "submittedByEmail",
                 pin_ids               AS "pinIds",
                 notes,
                 logged_at             AS "loggedAt",
@@ -155,7 +154,7 @@ export class WorkLogsRepository {
                 w.id,
                 w.meter_ion_device_name AS "meterIonDeviceName",
                 m.pme_display_name      AS "meterDisplayName",
-                w.user_email            AS "userEmail",
+                w.user_email            AS "submittedByEmail",
                 w.pin_ids               AS "pinIds",
                 w.notes,
                 w.logged_at             AS "loggedAt"

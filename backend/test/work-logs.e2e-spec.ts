@@ -113,7 +113,10 @@ describe('Work logs RBAC scoping (e2e)', () => {
         expect(res.body.total).toBe(2);
         expect(res.body.data).toHaveLength(2);
         for (const row of res.body.data) {
-            expect(row.userEmail).toBe(`${TECH_A}@test.local`);
+            expect(row.submittedByEmail).toBe(`${TECH_A}@test.local`);
+            // user_oid is internal audit only — must not leak in the API response.
+            expect(row).not.toHaveProperty('userOid');
+            expect(row).not.toHaveProperty('userEmail');
         }
     });
 
@@ -126,7 +129,9 @@ describe('Work logs RBAC scoping (e2e)', () => {
             .expect(200);
 
         expect(res.body.total).toBe(3);
-        const emails = (res.body.data as Array<{ userEmail: string }>).map((r) => r.userEmail);
+        const emails = (res.body.data as Array<{ submittedByEmail: string }>).map(
+            (r) => r.submittedByEmail,
+        );
         expect(emails).toEqual(
             expect.arrayContaining([`${TECH_A}@test.local`, `${TECH_B}@test.local`]),
         );
@@ -142,5 +147,27 @@ describe('Work logs RBAC scoping (e2e)', () => {
 
         expect(res.body.total).toBe(0);
         expect(res.body.data).toEqual([]);
+    });
+
+    it('POST 201 body matches the API contract (submittedByEmail, no oid)', async () => {
+        const res = await request(app.getHttpServer())
+            .post('/api/work-logs')
+            .set('x-test-oid', TECH_A)
+            .set('x-test-roles', 'technician')
+            .send({ meterIonDeviceName: TEST_METER, pinIds: [], notes: 'contract shape check' })
+            .expect(201);
+
+        expect(res.body).toMatchObject({
+            meterIonDeviceName: TEST_METER,
+            submittedByEmail: `${TECH_A}@test.local`,
+            pinIds: [],
+            notes: 'contract shape check',
+        });
+        expect(typeof res.body.id).toBe('string');
+        expect(typeof res.body.loggedAt).toBe('string');
+        expect(typeof res.body.createdAt).toBe('string');
+        // Internal audit fields must not be exposed to clients.
+        expect(res.body).not.toHaveProperty('userOid');
+        expect(res.body).not.toHaveProperty('userEmail');
     });
 });

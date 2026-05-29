@@ -18,7 +18,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migrate": "node-pg-migrate -m migrations",
     "migrate:up": "node-pg-migrate -m migrations up",
-    "migrate:down": "node-pg-migrate -m migrations down"
+    "migrate:down": "node-pg-migrate -m migrations down",
+    "seed:dev": "node seed/run-dev-seed.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",
