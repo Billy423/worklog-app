@@ -142,7 +142,7 @@ export function WorkLogForm() {
                 name="building"
                 render={({ field }) => (
                   <Select
-                    value={field.value || undefined}
+                    value={field.value}
                     onValueChange={(v) => {
                       field.onChange(v);
                       setValue('room', '');
@@ -173,7 +173,7 @@ export function WorkLogForm() {
                 name="room"
                 render={({ field }) => (
                   <Select
-                    value={field.value || undefined}
+                    value={field.value}
                     disabled={!building}
                     onValueChange={(v) => {
                       field.onChange(v);
@@ -204,7 +204,7 @@ export function WorkLogForm() {
                 name="meterIonDeviceName"
                 render={({ field }) => (
                   <Select
-                    value={field.value || undefined}
+                    value={field.value}
                     disabled={!room}
                     onValueChange={(v) => {
                       field.onChange(v);
