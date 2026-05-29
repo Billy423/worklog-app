@@ -63,6 +63,10 @@ jobs:
           # Add AZURE_TENANT_ID and AZURE_CLIENT_ID in repo Settings → Secrets
           AUTH_BYPASS_ROLE: admin
 
+      - name: Run frontend unit tests
+        working-directory: frontend
+        run: npm ci && npm run test
+
   integration-tests:
     name: Integration Tests
     runs-on: ubuntu-latest
