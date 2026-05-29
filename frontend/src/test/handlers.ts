@@ -20,6 +20,14 @@ export const meters = [
     lat: null,
     lon: null,
   },
+  {
+    ionDeviceName: '04.04ME1',
+    pmeDisplayName: '04 Main Electric',
+    buildingLocation: 'Bldg 4 - B111',
+    hardwareModel: 'ION9000',
+    lat: null,
+    lon: null,
+  },
 ];
 
 export const pins = [
